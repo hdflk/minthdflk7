@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>질병 예측 및 약 추천</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .symptom-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .symptom-list label {
+      display: block;
+      margin: 5px 0;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      border-radius: 5px;
+      font-weight: bold;
+      color: #856404;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>질병 예측 및 약 추천</h1>
+  <p>해당되는 증상을 선택하세요 (복수 선택 가능):</p>
+
+  <form id="symptomForm">
+    <div class="symptom-list">
+      <label><input type="checkbox" id="cough"> 기침</label>
+      <label><input type="checkbox" id="fever"> 발열</label>
+      <label><input type="checkbox" id="headache"> 두통</label>
+      <label><input type="checkbox" id="sore_throat"> 목 아픔</label>
+      <label><input type="checkbox" id="runny_nose"> 콧물</label>
+      <label><input type="checkbox" id="shortness_breath"> 호흡 곤란</label>
+      <label><input type="checkbox" id="fatigue"> 피로</label>
+    </div>
+
+    <button type="button" onclick="predictDisease()">질병 예측하기</button>
+  </form>
+
+  <div id="result" class="result"></div>
+
+  <script>
+    function predictDisease() {
+      const symptoms = [];
+      if (document.getElementById("cough").checked) symptoms.push("기침");
+      if (document.getElementById("fever").checked) symptoms.push("발열");
+      if (document.getElementById("headache").checked) symptoms.push("두통");
+      if (document.getElementById("sore_throat").checked) symptoms.push("목 아픔");
+      if (document.getElementById("runny_nose").checked) symptoms.push("콧물");
+      if (document.getElementById("shortness_breath").checked) symptoms.push("호흡 곤란");
+      if (document.getElementById("fatigue").checked) symptoms.push("피로");
+
+      if (symptoms.length === 0) {
+        document.getElementById("result").textContent = "증상을 하나 이상 선택해주세요.";
+        return;
+      }
+
+      let disease = "";
+      let medicine = "";
+
+      // 간단한 예측 로직
+      if (symptoms.includes("기침") && symptoms.includes("발열")) {
+        disease = "감기 또는 독감";
+        medicine = "타이레놀, 판콜에이";
+      } else if (symptoms.includes("발열") && symptoms.includes("두통") && symptoms.includes("피로")) {
+        disease = "독감";
+        medicine = "타미플루";
+      } else if (symptoms.includes("목 아픔") && symptoms.includes("콧물")) {
+        disease = "목감기";
+        medicine = "루카스탑, 스트렙실";
+      } else if (symptoms.includes("호흡 곤란") && symptoms.includes("발열")) {
+        disease = "폐렴";
+        medicine = "항생제 (예: 아지스로마이신)";
+      } else if (symptoms.includes("두통") && symptoms.includes("피로")) {
+        disease = "스트레스 또는 피로";
+        medicine = "비타민B, 고함량 영양제";
+      } else {
+        disease = "가벼운 몸살로 예측됩니다다.";
+        medicine = "-";
+      }
+
+      document.getElementById("result").innerHTML = `
+        🩺 예측된 질병: <strong>${disease}</strong><br/>
+        💊 추천 약: <strong>${medicine}</strong>
+      `;
+    }
+  </script>
+</body>
+</html>
